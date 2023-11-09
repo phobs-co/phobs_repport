@@ -5,7 +5,6 @@ import { AutoForm, ErrorsField, HiddenField, SelectField, SubmitField, TextField
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { useParams } from 'react-router';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -48,10 +47,12 @@ const ProtocolField = ({ onChange, value, ...props }) => {
     ? <SelectField {...props} options={options} onChange={v => onChange(parseInt(v, 10))} value={value} />
     : <TextField {...props} value="The event does not have samples yet." disabled />;
 };
-const DetailsStuff = () => {
-  let { _id } = useParams();
-  console.log('param:', useParams()._id);
-  _id = 'PEYXRAyaofC4Y6kT5';
+const Detail = () => {
+  // Get the documentID from the URL field. See imports/ui/layouts/App.jsx for the route containing :_id.
+  // useParams was not working so switched to window.location.href
+  const url = window.location.href;
+  const parts = url.split('/');
+  const _id = parts[parts.length - 1];
   const { doc, ready } = useTracker(() => {
     const subscription = Meteor.subscribe(Stuffs.adminPublicationName);
     const rdy = subscription.ready();
@@ -113,4 +114,4 @@ const DetailsStuff = () => {
   ) : <LoadingSpinner />;
 };
 
-export default DetailsStuff;
+export default Detail;

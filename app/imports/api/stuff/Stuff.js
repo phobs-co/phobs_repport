@@ -91,6 +91,16 @@ class StuffsCollection {
         optional: true,
         defaultValue: 0,
       },
+      wetWeight: {
+        type: Number,
+        optional: true,
+        min: 0,
+      },
+      dryWeight: {
+        type: Number,
+        optional: true,
+        min: 0,
+      },
 
     });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.
