@@ -26,6 +26,7 @@ Meteor.methods({
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Stuffs.collection.update(itemId, { $set: { status: 'claimed' } });
     Stuffs.collection.update(itemId, { $set: { owner: newOwner } });
+    Stuffs.collection.update(itemId, { $set: { claimedAt: Date.now() } });
   },
 });
 
@@ -53,9 +54,10 @@ Meteor.methods({
 });
 
 Meteor.methods({
-  'stuffs.dispose'(itemId) {
+  'stuffs.dispose'(itemId, selectedDistribution) {
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Stuffs.collection.update(itemId, { $set: { status: 'disposed' } });
+    Stuffs.collection.update(itemId, { $set: { distribution: selectedDistribution } });
   },
 });
 
@@ -112,3 +114,7 @@ Meteor.methods({
     Stuffs.collection.update(subsampleId, { $addToSet: { componentIds: { $each: componentIds } } });
   },
 });
+
+// -----------------------------------------------------------------------------------
+//  --------------------------       Time ??      ---------------------------------
+// -----------------------------------------------------------------------------------

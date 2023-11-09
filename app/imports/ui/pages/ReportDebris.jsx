@@ -69,7 +69,7 @@ const ReportDebris = () => {
     DFG_ID += '000'; // id_part_5
     DFG_ID += '000'; // id_part_6
 
-    const owner = Meteor.user().username;
+    const owner = Meteor.user() ? Meteor.user().username : 'anonymous';
 
     if (imageFile) {
       const reader = new FileReader();

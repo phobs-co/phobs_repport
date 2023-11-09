@@ -20,7 +20,10 @@ class StuffsCollection {
         type: Number,
         optional: true,
       },
-      owner: String,
+      owner: {
+        type: String,
+        optional: true,
+      },
       status: {
         type: String,
         allowedValues: ['unclaimed', 'claimed', 'stored', 'disposed'],
@@ -65,6 +68,7 @@ class StuffsCollection {
       },
       'sampleIds.$': {
         type: String,
+        optional: true,
       },
       hasSamples: {
         type: Boolean,
@@ -77,6 +81,15 @@ class StuffsCollection {
       facility: {
         type: String,
         optional: true,
+      },
+      claimedAt: {
+        type: SimpleSchema.Integer,
+        optional: true,
+      },
+      distribution: {
+        type: Number,
+        optional: true,
+        defaultValue: 0,
       },
 
     });

@@ -16,7 +16,7 @@ const AnalysisItems = ({ stuff, samples }) => {
 
   // Action for "Details" button
   const handleDetailsClick = () => {
-    navigate(`/details/${stuff._id}`);
+    navigate(`/detail/${stuff._id}`);
   };
 
   // Action for "Split" button

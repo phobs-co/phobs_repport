@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Col, Container, Row, Table, Button, Modal } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { useNavigate } from 'react-router-dom';
+import { XSquareFill, CheckSquareFill, PencilSquare } from 'react-bootstrap-icons';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -11,9 +12,11 @@ const ClaimedItems = ({ stuff }) => {
   const [showRelease, setShowRelease] = useState(false);
   const [showStore, setShowStore] = useState(false);
 
+  const claimTime = stuff.claimedAt;
+  const [timer, setTimer] = useState(claimTime ? Date.now() - claimTime : null);
   // Action for "Details" button
   const handleDetailsClick = () => {
-    navigate(`/details/${stuff._id}`);
+    navigate(`/detail/${stuff._id}`);
   };
 
   // Action for "Release" button
@@ -33,6 +36,28 @@ const ClaimedItems = ({ stuff }) => {
     });
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (claimTime) {
+        const currentTime = Date.now();
+        const timeElapsed = Math.floor((currentTime - claimTime) / 1000);
+        setTimer(120 * 60 * 60 - timeElapsed);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [claimTime]);
+
+  useEffect(() => {
+    // If timer reaches 0, this releases the debris. However, this is not the best way to do this.
+    // The timer should be set on the server side, and the server should release the debris when the timer reaches 0. For now this is a temporary solution.
+    if (timer === 0) handleRelease();
+  }, [timer]);
+
+  const seconds = Math.floor((timer) % 60).toString().padStart(2, '0');
+  const minutes = Math.floor((timer / 60) % 60).toString().padStart(2, '0');
+  const hours = Math.floor((timer / 3600) % 24).toString().padStart(2, '0');
+  const days = Math.floor(timer / (3600 * 24)).toString();
+
   const handleStore = () => {
     Meteor.call('stuffs.store', stuff._id, (error) => {
       if (error) {
@@ -50,22 +75,22 @@ const ClaimedItems = ({ stuff }) => {
         <td>{stuff.city}</td>
         <td>{stuff.type}</td>
         <td>{stuff.located}</td>
-        <td><Button onClick={handleDetailsClick}>Details</Button></td>
-        <td><Button onClick={handleShowRelease}>Release</Button></td>
-        <td><Button onClick={handleShowStore}>Store</Button></td>
+        <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
+        <td><Button variant="outline-danger" onClick={handleShowRelease} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}><XSquareFill /> {` ${days}:${hours}:${minutes}:${seconds}`}</Button></td>
+        <td><Button onClick={handleShowStore}><CheckSquareFill /></Button></td>
       </tr>
 
       <Modal show={showRelease} onHide={handleCloseRelease}>
         <Modal.Header closeButton>
-          <Modal.Title>Release Debris</Modal.Title>
+          <Modal.Title>Unclaim Debris</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Do you want to release this item?</Modal.Body>
+        <Modal.Body>Are you sure you want to remove this debris from your claimed list?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRelease}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleRelease}>
-            Release
+          <Button variant="danger" onClick={handleRelease}>
+            Remove
           </Button>
         </Modal.Footer>
       </Modal>
@@ -116,7 +141,7 @@ const ListClaimed = () => {
                 <th>Type</th>
                 <th>Located</th>
                 <th>Details</th>
-                <th>Release</th>
+                <th>Remove</th>
                 <th>Store</th>
               </tr>
             </thead>

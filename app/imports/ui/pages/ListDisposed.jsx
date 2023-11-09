@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Col, Container, Row, Table, Button } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { useNavigate } from 'react-router-dom';
+import { PencilSquare } from 'react-bootstrap-icons';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -11,14 +12,22 @@ const DisposedItems = ({ stuff }) => {
 
   // Action for "Details" button
   const handleDetailsClick = () => {
-    navigate(`/details/${stuff._id}`);
+    navigate(`/detail/${stuff._id}`);
   };
+
+  const distributionTypes = {
+    0: 'Not reported',
+    1: 'Recycled',
+    2: 'Reused',
+    3: 'Turned into power',
+  };
+  const distributionType = distributionTypes[stuff.distribution];
 
   return (
     <tr>
-      <td>{stuff.result}</td>
+      <td>{distributionType}</td>
       <td>{stuff.type}</td>
-      <td><Button onClick={handleDetailsClick}>Details</Button></td>
+      <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
     </tr>
   );
 };
@@ -39,8 +48,8 @@ const ListDisposed = () => {
       <Row className="justify-content-center">
         <Col md={7}>
           <Col className="text-center">
-            <h2>DFG Events that have been Disposed</h2>
-            <p>This debris has been recycled, burned, or thrown into a landfill 🚯</p>
+            <h2>DFG Events that have been Distributed</h2>
+            <p>This debris has been recycled, reused, etc. Samples may have been collected and these can still be viewed anytime.</p>
           </Col>
           <Table striped bordered hover>
             <thead>

@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Col, Container, Row, Table, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { CheckSquareFill, PencilSquare } from 'react-bootstrap-icons';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -11,7 +12,7 @@ const ReportedItems = ({ stuff }) => {
   const [show, setShow] = useState(false);
 
   const handleDetailsClick = () => {
-    navigate(`/details/${stuff._id}`);
+    navigate(`/detail/${stuff._id}`);
   };
 
   const handleClose = () => setShow(false);
@@ -35,15 +36,17 @@ const ReportedItems = ({ stuff }) => {
         <td>{stuff.type}</td>
         <td>{stuff.located}</td>
         <td>{stuff.describe}</td>
-        <td><Button onClick={handleDetailsClick}>Details</Button></td>
-        <td><Button onClick={handleShow}>Claim</Button></td>
+        <td>{stuff.owner}</td>
+        <td>{stuff._id}</td>
+        <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
+        <td><Button onClick={handleShow}><CheckSquareFill /></Button></td>
       </tr>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Claim Item</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Do you want to claim this item?</Modal.Body>
+        <Modal.Body>Do you want to claim this debris for your organization?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
@@ -86,6 +89,8 @@ const ListReported = () => {
                 <th>Type</th>
                 <th>Located</th>
                 <th>Describe</th>
+                <th>Owner</th>
+                <th>DB ID</th>
                 <th>Details</th>
                 <th>Claim</th>
               </tr>
