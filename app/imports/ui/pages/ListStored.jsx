@@ -90,8 +90,8 @@ const StoredItems = ({ stuff }) => {
       <tr>
         <td>{stuff.facility}</td>
         <td>{stuff.type}</td>
-        <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
-        <td><Button onClick={handleTransferClick}><ArrowLeftRight /> <PeopleFill /></Button></td>
+        <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
+        <td><Button variant="secondary" onClick={handleTransferClick}><ArrowLeftRight /> <PeopleFill /></Button></td>
         <td>{SampleButton}</td>
         <td><Button variant="success" onClick={handleShowDispose}><CheckSquareFill /></Button></td>
       </tr>
@@ -118,7 +118,7 @@ const StoredItems = ({ stuff }) => {
           <Button variant="secondary" onClick={handleCloseDispose}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleDispose}>
+          <Button variant="success" onClick={handleDispose}>
             Yes
           </Button>
         </Modal.Footer>

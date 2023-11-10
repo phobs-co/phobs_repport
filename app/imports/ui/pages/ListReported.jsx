@@ -36,7 +36,7 @@ const ReportedItems = ({ stuff }) => {
         <td>{stuff.type}</td>
         <td>{stuff.located}</td>
         <td>{stuff.describe}</td>
-        <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
+        <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button onClick={handleShow}><CheckSquareFill /></Button></td>
       </tr>
 

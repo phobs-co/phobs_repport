@@ -89,7 +89,6 @@ class StuffsCollection {
       distribution: {
         type: Number,
         optional: true,
-        defaultValue: 0,
       },
       wetWeight: {
         type: Number,

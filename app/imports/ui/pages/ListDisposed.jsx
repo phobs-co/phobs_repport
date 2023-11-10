@@ -27,7 +27,7 @@ const DisposedItems = ({ stuff }) => {
     <tr>
       <td>{distributionType}</td>
       <td>{stuff.type}</td>
-      <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
+      <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
     </tr>
   );
 };

@@ -75,7 +75,7 @@ const ClaimedItems = ({ stuff }) => {
         <td>{stuff.city}</td>
         <td>{stuff.type}</td>
         <td>{stuff.located}</td>
-        <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
+        <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button variant="outline-danger" onClick={handleShowRelease} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}><XSquareFill /> {` ${days}:${hours}:${minutes}:${seconds}`}</Button></td>
         <td><Button onClick={handleShowStore}><CheckSquareFill /></Button></td>
       </tr>

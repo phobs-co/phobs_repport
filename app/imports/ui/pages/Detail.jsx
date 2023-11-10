@@ -15,7 +15,6 @@ const DistributionField = ({ distributionValue, ...props }) => {
   const fieldProps = useField(props.name, props)[0]; // Add this line
 
   const distributionTypes = {
-    0: 'Not reported',
     1: 'Recycled',
     2: 'Reused',
     3: 'Turned into power',
