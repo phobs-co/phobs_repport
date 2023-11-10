@@ -36,8 +36,6 @@ const ReportedItems = ({ stuff }) => {
         <td>{stuff.type}</td>
         <td>{stuff.located}</td>
         <td>{stuff.describe}</td>
-        <td>{stuff.owner}</td>
-        <td>{stuff._id}</td>
         <td><Button onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button onClick={handleShow}><CheckSquareFill /></Button></td>
       </tr>
@@ -89,8 +87,6 @@ const ListReported = () => {
                 <th>Type</th>
                 <th>Located</th>
                 <th>Describe</th>
-                <th>Owner</th>
-                <th>DB ID</th>
                 <th>Details</th>
                 <th>Claim</th>
               </tr>
