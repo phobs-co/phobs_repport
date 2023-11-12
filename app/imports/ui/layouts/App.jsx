@@ -27,6 +27,7 @@ import ListDisposed from '../pages/ListDisposed';
 import ListAnalyze from '../pages/ListAnalyze';
 import ReportDebris from '../pages/ReportDebris';
 import Detail from '../pages/Detail';
+import OrgSignUp from '../pages/OrgSignUp';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
           <Route exact path="/landing" element={<Landing />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/orgsignup" element={<OrgSignUp />} />
           <Route path="/signout" element={<SignOut />} />
           <Route path="/home" element={<ProtectedRoute><HomeCiv /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />

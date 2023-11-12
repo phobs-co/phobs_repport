@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
@@ -7,10 +7,28 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { BoxArrowRight, PersonFill, PersonPlusFill, ChatQuote } from 'react-bootstrap-icons';
 
 const NavBar = () => {
-  // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
+  const [isGuest, setIsGuest] = useState(false);
+
   const { currentUser } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
   }), []);
+
+  const handleGuestLogin = () => {
+    // Replace the following logic with the code to set the user to the guest account
+    Meteor.loginWithPassword('guest@foo.com', 'changeme', (error) => {
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error('Guest login error:', error);
+      } else {
+        setIsGuest(true);
+      }
+    });
+  };
+
+  const handleGuestLogout = () => {
+    // Replace the following logic with the code to set the user to the guest account
+    setIsGuest(false);
+  };
 
   return (
     <Navbar bg="dark" expand="lg">
@@ -21,7 +39,7 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto justify-content-start">
-            {currentUser ? ([
+            {isGuest || currentUser ? ([
               <Nav.Link id="add-stuff-nav" as={NavLink} to="/add" key="add">Add Stuff</Nav.Link>,
               <Nav.Link id="add-stuff-nav" as={NavLink} to="/report" key="report">Report Debris</Nav.Link>,
               <Nav.Link id="list-stuff-nav" as={NavLink} to="/list" key="list">Everything</Nav.Link>,
@@ -42,22 +60,23 @@ const NavBar = () => {
               <NavDropdown id="login-dropdown" title="Login">
                 <NavDropdown.Item id="login-dropdown-sign-in" as={NavLink} to="/signin">
                   <PersonFill />
-                  Sign
-                  in
+                  Sign in
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-sign-up" as={NavLink} to="/signup">
                   <PersonPlusFill />
-                  Sign
-                  up
+                  Sign up
+                </NavDropdown.Item>
+                <NavDropdown.Item id="login-dropdown-guest" as={NavLink} to="/#" onClick={handleGuestLogin}>
+                  <PersonFill />
+                  Guest
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
               <NavDropdown id="navbar-current-user" title={currentUser}>
-                <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout">
+                <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout" onClick={handleGuestLogout}>
                   <BoxArrowRight />
                   {' '}
-                  Sign
-                  out
+                  Sign out
                 </NavDropdown.Item>
               </NavDropdown>
             )}

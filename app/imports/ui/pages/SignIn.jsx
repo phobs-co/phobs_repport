@@ -57,8 +57,10 @@ const SignIn = () => {
               </Card.Body>
             </Card>
           </AutoForm>
-          <Alert variant="light">
+          <Alert variant="dark">
             <Link to="/signup">Click here to Register</Link>
+            <br/>
+            <Link to="/forgot-password">Forgot Password?</Link>
           </Alert>
           {error === '' ? (
             ''
