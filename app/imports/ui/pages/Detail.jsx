@@ -1,115 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 import { Card, Col, Container, Row, Image, Modal, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, HiddenField, SelectField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, HiddenField, SelectField, SubmitField, TextField, ListField, NumField } from 'uniforms-bootstrap5';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { useField } from 'uniforms';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
+import DetailDistributionField from '../components/DetailDistributionField';
+import DetailProtocolField from '../components/DetailProtocolField';
+import DetailWeightField from '../components/DetailWeightField';
+import DetailDisplayPieGraph from '../components/DetailDisplayPieGraph';
+import DetailAddPartModal from '../components/DetailAddPartModal';
 
 const bridge = new SimpleSchema2Bridge(Stuffs.schema);
-
-const DistributionField = ({ distributionValue, ...props }) => {
-  const fieldProps = useField(props.name, props)[0]; // Add this line
-
-  const distributionTypes = {
-    1: 'Recycled',
-    2: 'Reused',
-    3: 'Turned into power',
-  };
-
-  const options = Object.keys(distributionTypes).map(key => ({
-    label: distributionTypes[key],
-    value: parseInt(key, 10),
-  }));
-
-  return (distributionValue !== null && distributionValue !== undefined) || fieldProps.value
-    ? <SelectField {...props} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
-    : <TextField {...props} value="The event has not been distributed." disabled />;
-};
-
-const ProtocolField = ({ protocolValue, ...props }) => {
-  const fieldProps = useField(props.name, props)[0]; // This value gets updated when field changes.
-
-  console.log('Protocol Value: ', protocolValue);
-
-  const protocolNames = {
-    1: 'Measure and Dispose',
-    2: 'Four Corners',
-    3: 'One of All',
-    4: 'Hybrid',
-    5: 'Disentanglement',
-    6: 'Reverse Engineer',
-  };
-
-  const options = Object.keys(protocolNames).map(key => ({
-    label: protocolNames[key],
-    value: parseInt(key, 10),
-  }));
-
-  return (protocolValue !== null && protocolValue !== undefined) || fieldProps.value
-    ? <SelectField {...props} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
-    : <TextField {...props} value="The event does not have samples yet." disabled />;
-};
-
-const WeightField = (props) => {
-  const [show, setShow] = React.useState(false);
-  const [weight, setWeight] = React.useState(0);
-  const [unit, setUnit] = React.useState('kg'); // default unit
-
-  const field = useField(props.name, props, { initialValue: false })[0];
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleWeightChange = (e) => {
-    setWeight(e.target.value);
-  };
-
-  const handleUnitChange = (e) => {
-    setUnit(e.target.value);
-  };
-
-  const saveWeight = () => {
-    const convertedWeight = unit === 'lbs' ? parseFloat(weight) * 0.45359237 : parseFloat(weight);
-    field.onChange(convertedWeight);
-    handleClose();
-  };
-
-  return (
-    <>
-      { field.value !== undefined && !Number.isNaN(parseFloat(field.value))
-        ? <TextField {...props} value={`${field.value.toFixed(2)} kg`} disabled />
-        : <TextField {...props} value="This event does not yet have a recorded weight." disabled /> }
-      <Button variant={field.value !== undefined && !Number.isNaN(parseFloat(field.value)) ? 'outline-secondary' : 'primary'} onClick={handleShow}>
-        { field.value !== undefined && !Number.isNaN(parseFloat(field.value)) ? 'Adjust Weight' : 'Add Weight' }
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Weight</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="number" step="0.01" min="0.01" value={weight} onChange={handleWeightChange} />
-          <select value={unit} onChange={handleUnitChange}>
-            <option value="kg">kg</option>
-            <option value="lbs">lbs</option>
-          </select>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={saveWeight}>
-            Save Weight
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-};
 
 const Detail = () => {
   // Get the documentID from the URL field. See imports/ui/layouts/App.jsx for the route containing :_id.
@@ -130,13 +34,64 @@ const Detail = () => {
   const protocolValue = doc && doc.protocol;
 
   const submit = (data) => {
-    const { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight } = data;
-    Stuffs.collection.update(_id, { $set: { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight } }, (error) => (error ?
+    const { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight, parts } = data;
+    Stuffs.collection.update(_id, { $set: { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight, parts } }, (error) => (error ?
       swal('Error', error.message, 'error') :
       swal('Success', 'Event updated successfully', 'success')));
   };
+  const [showModal, setShowModal] = useState(false);
+  const [partsWeightTotal, setPartsWeightTotal] = useState(0);
 
-  console.log(Stuffs.collection.findOne(_id));
+  useEffect(() => {
+    if (doc?.parts) {
+      const totalWeight = doc.parts.map(part => part.weight).reduce((a, b) => a + b, 0);
+      setPartsWeightTotal(totalWeight);
+    }
+  }, [doc]);
+
+  const restWeight = (doc?.dryWeight || 0) - partsWeightTotal;
+
+  const handlePartAdd = (newPart) => {
+    const updatedParts = doc?.parts ? [...doc.parts, newPart] : [newPart];
+
+    Stuffs.collection.update(_id, { $set: { parts: updatedParts } }, error => {
+      if (error) {
+        swal('Error', error.message, 'error');
+      } else {
+        const updatedDoc = Stuffs.collection.findOne(_id);
+
+        if (updatedDoc?.parts) {
+          const totalWeight = updatedDoc.parts.map(part => part.weight)
+            .reduce((a, b) => a + b, 0);
+          setPartsWeightTotal(totalWeight);
+        }
+
+        swal('Success', 'Part added successfully', 'success');
+      }
+    });
+  };
+
+  const handlePartDelete = (index) => {
+    const updatedParts = [...doc.parts];
+    updatedParts.splice(index, 1);
+
+    Stuffs.collection.update(_id, { $set: { parts: updatedParts } }, error => {
+      if (error) {
+        swal('Error', error.message, 'error');
+      } else {
+        const updatedDoc = Stuffs.collection.findOne(_id);
+
+        if (updatedDoc?.parts) {
+          const totalWeight = updatedDoc.parts.map(part => part.weight)
+            .reduce((a, b) => a + b, 0);
+          setPartsWeightTotal(totalWeight);
+        }
+
+        swal('Success', 'Part deleted successfully', 'success');
+      }
+    });
+  };
+
   return ready ? (
 
     <Container className="py-3">
@@ -152,20 +107,39 @@ const Detail = () => {
                 <SelectField name="located" />
                 <SelectField name="describe" />
                 <SelectField name="island" />
-                <ProtocolField name="protocol" protocolValue={protocolValue} />
+                <DetailProtocolField name="protocol" protocolValue={protocolValue} />
                 <TextField name="facility" />
-                <DistributionField name="distribution" distributionValue={doc && doc.distribution} />
+                <DetailDistributionField name="distribution" distributionValue={doc && doc.distribution} />
 
                 <TextField name="claimedAt" disabled />
                 <TextField name="eventId" disabled />
-                <WeightField name="wetWeight" label="Wet Weight" />
-                <WeightField name="dryWeight" label="Dry Weight" />
+                <DetailWeightField name="wetWeight" label="Wet Weight" />
+                <DetailWeightField name="dryWeight" label="Dry Weight" />
                 <TextField name="sampleIds" disabled />
                 {
                   doc && doc.image
                     ? <Image src={doc.image} alt="Loaded from AWS" rounded fluid />
                     : <p>No image submitted for this event.</p>
                 }
+
+                <ListField name="parts">
+                  <TextField name="$.name" />
+                  <NumField name="$.distribution" decimal={false} />
+                  <NumField name="$.weight" min={0} max={restWeight} />
+                  <Button
+                    onClick={(index) => handlePartDelete(index)}
+                    variant="outline-danger"
+                  >
+                    Delete
+                  </Button>
+                  <hr style={{ color: 'black' }} />
+                </ListField>
+
+                <Button onClick={() => setShowModal(true)} disabled={!doc.dryWeight || partsWeightTotal >= doc.dryWeight}>
+                  Add New Part
+                </Button>
+                <DetailAddPartModal isModalOpen={showModal} closeModal={() => setShowModal(false)} handlePartAdd={handlePartAdd} restWeight={restWeight} />
+
                 <SubmitField value="Save Changes" />
                 <ErrorsField />
                 <HiddenField name="owner" />
@@ -173,6 +147,12 @@ const Detail = () => {
               </Card.Body>
             </Card>
           </AutoForm>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6}>
+          <DetailDisplayPieGraph event={doc} />
         </Col>
       </Row>
     </Container>
