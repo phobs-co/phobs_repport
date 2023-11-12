@@ -77,6 +77,11 @@ const NavBar = () => {
                 {currentUser ? (
                   <NavDropdown.Item id="send-invite-nav" as={NavLink} to="/invite" key="invite">Send Invite</NavDropdown.Item>
                 ) : null}
+                <NavDropdown.Item id="navbar-edit-profile" as={NavLink} to="/editprofile">
+                  <PersonPlusFill />
+                  Edit
+                  Profile
+                </NavDropdown.Item>
                 <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout" onClick={handleGuestLogout}>
                   <BoxArrowRight />
                   {' '}

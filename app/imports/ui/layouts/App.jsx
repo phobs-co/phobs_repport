@@ -28,6 +28,7 @@ import ListAnalyze from '../pages/ListAnalyze';
 import ReportDebris from '../pages/ReportDebris';
 import Detail from '../pages/Detail';
 import OrgSignUp from '../pages/OrgSignUp';
+import EditProfile from "../pages/EditProfile";
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/report" element={<ProtectedRoute><ReportDebris /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
+          <Route path="/editprofile/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/detail/:_id" element={<ProtectedRoute><Detail /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
