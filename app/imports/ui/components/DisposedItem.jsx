@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DisposedItem = ({ stuff }) => {
   const navigate = useNavigate();
@@ -26,6 +27,14 @@ const DisposedItem = ({ stuff }) => {
       <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
     </tr>
   );
+};
+
+DisposedItem.propTypes = {
+  stuff: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    distribution: PropTypes.number,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default DisposedItem;

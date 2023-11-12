@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 
 const distributionTypes = {
   1: 'Recycled',
@@ -23,10 +25,10 @@ const DetailAddPartModal = ({ isModalOpen, closeModal, handlePartAdd, restWeight
       </Modal.Header>
       <Modal.Body>
         <form>
-          <label> Name:
+          <label htmlFor="partName"> Name:
             <input type="text" value={newPart.name} onChange={e => setNewPart({ ...newPart, name: e.target.value })} />
           </label>
-          <label> Weight:
+          <label htmlFor="partWeight"> Weight:
             <input
               type="number"
               min="0"
@@ -42,7 +44,7 @@ const DetailAddPartModal = ({ isModalOpen, closeModal, handlePartAdd, restWeight
               }}
             />
           </label>
-          <label> Distribution Type:
+          <label htmlFor="partDistribution"> Distribution Type:
             <select value={newPart.distribution} onChange={e => setNewPart({ ...newPart, distribution: parseInt(e.target.value, 10) })}>
               {Object.entries(distributionTypes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
             </select>
@@ -59,6 +61,13 @@ const DetailAddPartModal = ({ isModalOpen, closeModal, handlePartAdd, restWeight
       </Modal.Footer>
     </Modal>
   );
+};
+
+DetailAddPartModal.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  handlePartAdd: PropTypes.func.isRequired,
+  restWeight: PropTypes.number.isRequired,
 };
 
 export default DetailAddPartModal;

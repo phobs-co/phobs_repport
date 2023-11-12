@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { CheckSquareFill, PencilSquare, XSquareFill } from 'react-bootstrap-icons';
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 
 const ClaimedItems = ({ stuff }) => {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ const ClaimedItems = ({ stuff }) => {
   const handleRelease = () => {
     Meteor.call('stuffs.release', stuff._id, (error) => {
       if (error) {
+        // TODO add error handling
+        // eslint-disable-next-line no-console
         console.log(`Releasing ${stuff._id} failed`);
       } else {
         handleCloseRelease();
@@ -57,6 +61,8 @@ const ClaimedItems = ({ stuff }) => {
   const handleStore = () => {
     Meteor.call('stuffs.store', stuff._id, (error) => {
       if (error) {
+        // TODO add error handling
+        // eslint-disable-next-line no-console
         console.log(`Moving ${stuff._id} to storage failed`);
       } else {
         handleCloseStore();
@@ -107,6 +113,17 @@ const ClaimedItems = ({ stuff }) => {
       </Modal>
     </>
   );
+};
+
+ClaimedItems.propTypes = {
+  stuff: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    island: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    located: PropTypes.bool.isRequired,
+    claimedAt: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ClaimedItems;

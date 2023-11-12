@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert';
-import { Card, Col, Container, Row, Image, Modal, Button } from 'react-bootstrap';
+import { Card, Col, Container, Row, Image, Button } from 'react-bootstrap';
 import { AutoForm, ErrorsField, HiddenField, SelectField, SubmitField, TextField, ListField, NumField } from 'uniforms-bootstrap5';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -34,6 +34,7 @@ const Detail = () => {
   const protocolValue = doc && doc.protocol;
 
   const submit = (data) => {
+    // eslint-disable-next-line no-shadow
     const { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight, parts } = data;
     Stuffs.collection.update(_id, { $set: { name, status, type, located, describe, island, protocol, facility, distribution, wetWeight, dryWeight, parts } }, (error) => (error ?
       swal('Error', error.message, 'error') :

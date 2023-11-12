@@ -1,9 +1,10 @@
 import { useField } from 'uniforms';
 import { SelectField, TextField } from 'uniforms-bootstrap5';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const DetailDistributionField = ({ distributionValue, ...props }) => {
-  const fieldProps = useField(props.name, props)[0]; // Add this line
+const DetailDistributionField = ({ distributionValue, name }) => {
+  const fieldProps = useField(name, {})[0];
 
   const distributionTypes = {
     1: 'Recycled',
@@ -17,8 +18,17 @@ const DetailDistributionField = ({ distributionValue, ...props }) => {
   }));
 
   return (distributionValue !== null && distributionValue !== undefined) || fieldProps.value
-    ? <SelectField {...props} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
-    : <TextField {...props} value="The event has not been distributed." disabled />;
+    ? <SelectField name={name} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
+    : <TextField name={name} value="The event has not been distributed." disabled />;
+};
+
+DetailDistributionField.propTypes = {
+  distributionValue: PropTypes.number,
+  name: PropTypes.string.isRequired,
+};
+
+DetailDistributionField.defaultProps = {
+  distributionValue: 0,
 };
 
 export default DetailDistributionField;

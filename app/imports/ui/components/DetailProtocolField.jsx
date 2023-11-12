@@ -1,9 +1,10 @@
 import { useField } from 'uniforms';
 import { SelectField, TextField } from 'uniforms-bootstrap5';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const DetailProtocolField = ({ protocolValue, ...props }) => {
-  const fieldProps = useField(props.name, props)[0]; // This value gets updated when field changes.
+const DetailProtocolField = ({ protocolValue, name }) => {
+  const fieldProps = useField(name, {})[0];
 
   const protocolNames = {
     1: 'Measure and Dispose',
@@ -20,8 +21,17 @@ const DetailProtocolField = ({ protocolValue, ...props }) => {
   }));
 
   return (protocolValue !== null && protocolValue !== undefined) || fieldProps.value
-    ? <SelectField {...props} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
-    : <TextField {...props} value="The event does not have samples yet." disabled />;
+    ? <SelectField name={name} options={options} onChange={v => fieldProps.onChange(v)} value={fieldProps.value} />
+    : <TextField name={name} value="The event does not have samples yet." disabled />;
+};
+
+DetailProtocolField.propTypes = {
+  protocolValue: PropTypes.number,
+  name: PropTypes.string.isRequired,
+};
+
+DetailProtocolField.defaultProps = {
+  protocolValue: 0,
 };
 
 export default DetailProtocolField;

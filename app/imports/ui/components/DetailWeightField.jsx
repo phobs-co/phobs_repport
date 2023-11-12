@@ -2,13 +2,14 @@ import React from 'react';
 import { useField } from 'uniforms';
 import { TextField } from 'uniforms-bootstrap5';
 import { Button, Modal } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-const DetailWeightField = (props) => {
+const DetailWeightField = ({ name }) => {
   const [show, setShow] = React.useState(false);
   const [weight, setWeight] = React.useState(0);
   const [unit, setUnit] = React.useState('kg'); // default unit
 
-  const field = useField(props.name, props, { initialValue: false })[0];
+  const field = useField(name, {}, { initialValue: false })[0];
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -30,8 +31,8 @@ const DetailWeightField = (props) => {
   return (
     <>
       { field.value !== undefined && !Number.isNaN(parseFloat(field.value))
-        ? <TextField {...props} value={`${field.value.toFixed(2)} kg`} disabled />
-        : <TextField {...props} value="This event does not yet have a recorded weight." disabled /> }
+        ? <TextField name={name} value={`${field.value.toFixed(2)} kg`} disabled />
+        : <TextField name={name} value="This event does not yet have a recorded weight." disabled /> }
       <Button variant={field.value !== undefined && !Number.isNaN(parseFloat(field.value)) ? 'outline-secondary' : 'primary'} onClick={handleShow}>
         { field.value !== undefined && !Number.isNaN(parseFloat(field.value)) ? 'Adjust Weight' : 'Add Weight' }
       </Button>
@@ -58,6 +59,10 @@ const DetailWeightField = (props) => {
       </Modal>
     </>
   );
+};
+
+DetailWeightField.propTypes = {
+  name: PropTypes.string.isRequired,
 };
 
 export default DetailWeightField;

@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ArrowLeftRight, CheckSquareFill, PencilSquare, PeopleFill } from 'react-bootstrap-icons';
+import PropTypes from 'prop-types';
+import { Meteor } from 'meteor/meteor';
 import { Samples } from '../../api/stuff/Sample';
 import { Stuffs } from '../../api/stuff/Stuff';
 
@@ -23,7 +25,6 @@ const StoredItem = ({ stuff }) => {
   };
 
   // Actions for "Sample" button
-
   const handleExistingSampleClick = () => {
     navigate(`/analysis#${stuff.event_id}`);
   };
@@ -33,18 +34,21 @@ const StoredItem = ({ stuff }) => {
   const handleCloseNewSample = () => setShowNewSample(false);
   const handleShowNewSample = () => setShowNewSample(true);
   const handleNewSample = () => {
-    // create new sample
-    console.log(selectedProtocol);
     const newSampleId = Samples.collection.insert({
       name: 'Sample Initial',
       event_id: 'a', // stuff.eventId
       sample_id: '0001',
+      // eslint-disable-next-line no-unused-vars
     }, (err, _id) => { // callback function to get the _id of the inserted document
       if (err) {
+        // TODO add error handling
+        // eslint-disable-next-line no-console
         console.error('Could not insert new sample:', err);
       } else {
         Meteor.call('stuffs.linkSamplesWithEvent', stuff._id, [newSampleId], selectedProtocol, (error) => {
           if (error) {
+            // TODO add error handling
+            // eslint-disable-next-line no-console
             console.log(`Creating a sample for ${stuff._id} failed${error}`);
           } else {
             handleCloseNewSample();
@@ -68,6 +72,8 @@ const StoredItem = ({ stuff }) => {
   const handleDispose = () => {
     Meteor.call('stuffs.dispose', stuff._id, selectedDistribution, (error) => {
       if (error) {
+        // TODO add error handling
+        // eslint-disable-next-line no-console
         console.log(`Marking ${stuff._id} as disposed failed`);
       } else {
         handleCloseDispose();
@@ -155,6 +161,15 @@ const StoredItem = ({ stuff }) => {
 
     </>
   );
+};
+
+StoredItem.propTypes = {
+  stuff: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    event_id: PropTypes.string,
+    facility: PropTypes.string,
+    type: PropTypes.string,
+  }).isRequired,
 };
 
 export default StoredItem;

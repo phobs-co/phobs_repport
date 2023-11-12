@@ -3,12 +3,6 @@ import { ArcElement, CategoryScale, Chart, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 
-// Shows a pie graph that displays the distribution of a single debris event by distribution type
-// For example, if a debris event has 3 unique parts, and 2 of them were recycled and 1 was reused, the pie graph will show 2/3 of the pie as "Recycled" and 1/3 of the pie as "Reused"
-// Note that this is different from the pie graph in ListAnalyze.jsx, which shows the distribution of all debris events in the database
-// Note 2: This does not cover samples as these are not distributed and only make up a small portion of the debris event
-// This will use the Chart.js library to display the pie graph
-
 const DetailDisplayPieGraph = ({ event }) => {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState(null);
@@ -59,7 +53,7 @@ const DetailDisplayPieGraph = ({ event }) => {
   }, [event]);
 
   return (
-    <>
+    <div>
       {chartData && chartOptions
         ? (
           <div style={{ width: '100%', height: '500px', marginBottom: '100px' }}>
@@ -68,7 +62,7 @@ const DetailDisplayPieGraph = ({ event }) => {
           </div>
         )
         : <p>This event does not have any parts yet.</p>}
-    </>
+    </div>
   );
 };
 

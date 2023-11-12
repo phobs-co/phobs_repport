@@ -67,7 +67,7 @@ const AnalysisPieChart = () => {
   }, [stuffs]);
 
   return (
-    <>
+    <div>
       {chartData && chartOptions
         ? (
           <div style={{ width: '100%', height: '500px', marginBottom: '100px' }}>
@@ -76,7 +76,7 @@ const AnalysisPieChart = () => {
           </div>
         )
         : <p>No events have any parts yet.</p>}
-    </>
+    </div>
   );
 };
 

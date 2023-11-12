@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Button, Card, Col, Collapse, Row, Table } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import { Subsamples } from '../../api/stuff/Subsample';
 
 const AnalysisItems = ({ stuff, samples }) => {
   const [open, setOpen] = useState(false);
   const [showSubsamples, setShowSubsamples] = useState({});
-  const navigate = useNavigate();
-
-  // Action for "Details" button
-  const handleDetailsClick = () => {
-    navigate(`/detail/${stuff._id}`);
-  };
-
-  // Action for "Split" button
-  const handleSplitClick = () => {
-    navigate(`/split/${stuff._id}`);
-  };
 
   const relevantSamples = samples.filter(sample => stuff.sampleIds.includes(sample._id));
 
@@ -143,6 +133,23 @@ const AnalysisItems = ({ stuff, samples }) => {
       </Card.Body>
     </Card>
   );
+};
+
+AnalysisItems.propTypes = {
+  stuff: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    protocol: PropTypes.number.isRequired,
+    sampleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  samples: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    sample_id: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]).isRequired,
+    subsampleIds: PropTypes.arrayOf(PropTypes.string),
+  })).isRequired,
 };
 
 export default AnalysisItems;
