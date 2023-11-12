@@ -33,8 +33,11 @@ const ReportedItems = ({ stuff }) => {
         <td>{stuff.island}</td>
         <td>{stuff.city}</td>
         <td>{stuff.type}</td>
+        <td>{stuff.customTypeDescription}</td>
         <td>{stuff.located}</td>
+        <td>{stuff.customLocatedDescription}</td>
         <td>{stuff.describe}</td>
+        <td>{stuff.customDescriptionDescription}</td>
         <td><Button onClick={handleDetailsClick}>Details</Button></td>
         <td><Button onClick={handleShow}>Claim</Button></td>
       </tr>
@@ -84,8 +87,11 @@ const ListReported = () => {
                 <th>Island</th>
                 <th>City</th>
                 <th>Type</th>
+                <th>Type: Other</th>
                 <th>Located</th>
+                <th>Located: Other</th>
                 <th>Describe</th>
+                <th>Describe: Other</th>
                 <th>Details</th>
                 <th>Claim</th>
               </tr>
