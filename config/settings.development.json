@@ -5,10 +5,10 @@
     { "email": "guest1@foo.com", "password": "changeme", "role": "", "organization": "org1" },
     { "email": "john@foo.com", "password": "changeme" }
   ],
-"defaultRoles": [
-    { "name": "admin", "permissions": [ "admin" ] },
-    { "name": "guest", "permissions": [ "read" ] }
+"defaultOrganization": [
+    { "organization": "test", "organizationToken": "123"  }
   ],
+
   "defaultData": [
     { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
     { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },
