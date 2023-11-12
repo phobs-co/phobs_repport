@@ -91,7 +91,7 @@ const StoredItem = ({ stuff }) => {
     <>
       <tr>
         <td>{stuff.facility}</td>
-        <td>{stuff.type}</td>
+        {stuff.type === 'Other' ? <td>{stuff.customTypeDescription}</td> : <td>{stuff.type}</td>}
         <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button variant="secondary" onClick={handleTransferClick}><ArrowLeftRight /> <PeopleFill /></Button></td>
         <td>{SampleButton}</td>
@@ -169,6 +169,7 @@ StoredItem.propTypes = {
     event_id: PropTypes.string,
     facility: PropTypes.string,
     type: PropTypes.string,
+    customTypeDescription: PropTypes.string,
   }).isRequired,
 };
 

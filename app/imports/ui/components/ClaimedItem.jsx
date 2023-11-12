@@ -75,8 +75,9 @@ const ClaimedItems = ({ stuff }) => {
       <tr>
         <td>{stuff.island}</td>
         <td>{stuff.city}</td>
-        <td>{stuff.type}</td>
-        <td>{stuff.located}</td>
+        {stuff.type === 'Other' ? <td>{stuff.customTypeDescription}</td> : <td>{stuff.type}</td>}
+        {stuff.located === 'Other' ? <td>{stuff.customLocatedDescription}</td> : <td>{stuff.located}</td>}
+        {stuff.describe === 'Other' ? <td>{stuff.customDescriptionDescription}</td> : <td>{stuff.describe}</td>}
         <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button variant="outline-danger" onClick={handleShowRelease} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}><XSquareFill /> {` ${days}:${hours}:${minutes}:${seconds}`}</Button></td>
         <td><Button onClick={handleShowStore}><CheckSquareFill /></Button></td>
@@ -121,7 +122,11 @@ ClaimedItems.propTypes = {
     island: PropTypes.string.isRequired,
     city: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    located: PropTypes.bool.isRequired,
+    customTypeDescription: PropTypes.string,
+    located: PropTypes.string.isRequired,
+    customLocatedDescription: PropTypes.string,
+    describe: PropTypes.string.isRequired,
+    customDescriptionDescription: PropTypes.string,
     claimedAt: PropTypes.string.isRequired,
   }).isRequired,
 };

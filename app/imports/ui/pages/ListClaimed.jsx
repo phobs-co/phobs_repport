@@ -32,6 +32,7 @@ const ListClaimed = () => {
                 <th>City</th>
                 <th>Type</th>
                 <th>Located</th>
+                <th>Description</th>
                 <th>Details</th>
                 <th>Remove</th>
                 <th>Store</th>

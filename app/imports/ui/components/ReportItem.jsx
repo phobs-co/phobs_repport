@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Button, Modal } from 'react-bootstrap';
 import { CheckSquareFill, PencilSquare } from 'react-bootstrap-icons';
+import PropTypes from 'prop-types';
 
 const ReportedItem = ({ stuff }) => {
   const navigate = useNavigate();
@@ -30,9 +31,9 @@ const ReportedItem = ({ stuff }) => {
       <tr>
         <td>{stuff.island}</td>
         <td>{stuff.city}</td>
-        <td>{stuff.type}</td>
-        <td>{stuff.located}</td>
-        <td>{stuff.describe}</td>
+        {stuff.type === 'Other' ? <td>{stuff.customTypeDescription}</td> : <td>{stuff.type}</td>}
+        {stuff.located === 'Other' ? <td>{stuff.customLocatedDescription}</td> : <td>{stuff.located}</td>}
+        {stuff.describe === 'Other' ? <td>{stuff.customDescriptionDescription}</td> : <td>{stuff.describe}</td>}
         <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
         <td><Button onClick={handleShow}><CheckSquareFill /></Button></td>
       </tr>
@@ -54,6 +55,20 @@ const ReportedItem = ({ stuff }) => {
 
     </>
   );
+};
+
+ReportedItem.propTypes = {
+  stuff: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    island: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    customTypeDescription: PropTypes.string,
+    located: PropTypes.string.isRequired,
+    customLocatedDescription: PropTypes.string,
+    describe: PropTypes.string.isRequired,
+    customDescriptionDescription: PropTypes.string,
+  }).isRequired,
 };
 
 export default ReportedItem;

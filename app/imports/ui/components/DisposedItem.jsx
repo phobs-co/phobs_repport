@@ -23,7 +23,7 @@ const DisposedItem = ({ stuff }) => {
   return (
     <tr>
       <td>{distributionType}</td>
-      <td>{stuff.type}</td>
+      {stuff.type === 'Other' ? <td>{stuff.customTypeDescription}</td> : <td>{stuff.type}</td>}
       <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
     </tr>
   );
@@ -34,6 +34,7 @@ DisposedItem.propTypes = {
     _id: PropTypes.string.isRequired,
     distribution: PropTypes.number,
     type: PropTypes.string.isRequired,
+    customTypeDescription: PropTypes.string,
   }).isRequired,
 };
 
