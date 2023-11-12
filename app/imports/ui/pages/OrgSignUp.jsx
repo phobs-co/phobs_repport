@@ -12,8 +12,6 @@ const OrgSignUp = ({ location }) => {
   const [redirectToReferer, setRedirectToRef] = useState(false);
 
   const schema = new SimpleSchema({
-    // username: String,
-    // password: String,
     organization: String,
     organizationToken: String,
   });
@@ -29,7 +27,7 @@ const OrgSignUp = ({ location }) => {
     }
 
     // Use the organization name as the username and organization token as the password
-    Accounts.createUser({ username: organization, password: organizationToken }, (err) => {
+    Accounts.createOrganization({ username: organization, password: organizationToken }, (err) => {
       if (err) {
         setError(err.reason);
       } else {
@@ -39,12 +37,13 @@ const OrgSignUp = ({ location }) => {
     });
   };
 
-  const isValidOrganizationToken = (token) =>
-      // Implement the logic to validate the organization token here
-      // You might need to make a server call or use a library for token validation
-      // Return true if the token is valid, otherwise return false
-      // Example: return tokenValidationService.validateToken(token);
-      true;
+  const isValidOrganizationToken = (token) => {
+    // Implement the logic to validate the organization token here
+    // You might need to make a server call or use a library for token validation
+    // Return true if the token is valid, otherwise return false
+    // Example: return tokenValidationService.validateToken(token);
+    return true;
+  };
 
   const { from } = location?.state || { from: { pathname: '/add' } };
   if (redirectToReferer) {

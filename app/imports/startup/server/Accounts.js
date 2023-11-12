@@ -4,6 +4,17 @@ import { Roles } from 'meteor/alanning:roles';
 
 /* eslint-disable no-console */
 
+const createOrganization = (organization, organizationToken) => {
+  console.log(`  Creating organization ${organization}.`);
+
+  const organizationID = Accounts.createUser({
+    username: organization,
+    password: organizationToken,
+  });
+
+  Roles.createRole('organization', { unlessExists: true });
+  Roles.addUsersToRoles(organizationID, 'organization');
+}
 const createUser = (email, password, role, organization, organizationToken) => {
   console.log(`  Creating user ${email || organization}.`);
 
@@ -32,9 +43,7 @@ const createUser = (email, password, role, organization, organizationToken) => {
 if (Meteor.users.find().count() === 0) {
   if (Meteor.settings.defaultAccounts) {
     console.log('Creating the default user(s)');
-    Meteor.settings.defaultAccounts.forEach(({ email, password, role, organization, organizationToken }) =>
-        createUser(email, password, role, organization, organizationToken)
-    );
+    Meteor.settings.defaultAccounts.forEach(({ email, password, role, organization, organizationToken }) => createUser(email, password, role, organization, organizationToken));
   } else {
     console.log('Cannot initialize the database!  Please invoke meteor with a settings file.');
   }

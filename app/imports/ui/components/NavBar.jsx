@@ -9,15 +9,14 @@ import { BoxArrowRight, PersonFill, PersonPlusFill, ChatQuote } from 'react-boot
 const NavBar = () => {
   const [isGuest, setIsGuest] = useState(false);
 
-  const { currentUser } = useTracker(() => ({
+  const { currentUser, organization } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
+    organization: Meteor.user() ? Meteor.user().organization : null,
   }), []);
 
   const handleGuestLogin = () => {
-    // Replace the following logic with the code to set the user to the guest account
-    Meteor.loginWithPassword('guest@foo.com', 'changeme', (error) => {
+    Meteor.loginWithPassword('guest', 'changeme', (error) => {
       if (error) {
-        // eslint-disable-next-line no-console
         console.error('Guest login error:', error);
       } else {
         setIsGuest(true);
@@ -26,7 +25,6 @@ const NavBar = () => {
   };
 
   const handleGuestLogout = () => {
-    // Replace the following logic with the code to set the user to the guest account
     setIsGuest(false);
   };
 
@@ -70,9 +68,15 @@ const NavBar = () => {
                   <PersonFill />
                   Guest
                 </NavDropdown.Item>
+                {currentUser ? (
+                  <NavDropdown.Item id="send-invite-nav" as={NavLink} to="/invite" key="invite">Send Invite</NavDropdown.Item>
+                ) : null}
               </NavDropdown>
             ) : (
               <NavDropdown id="navbar-current-user" title={currentUser}>
+                {currentUser ? (
+                  <NavDropdown.Item id="send-invite-nav" as={NavLink} to="/invite" key="invite">Send Invite</NavDropdown.Item>
+                ) : null}
                 <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout" onClick={handleGuestLogout}>
                   <BoxArrowRight />
                   {' '}
