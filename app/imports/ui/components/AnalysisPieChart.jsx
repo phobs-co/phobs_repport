@@ -4,6 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { ArcElement, CategoryScale, Chart, Legend } from 'chart.js';
 import { Stuffs } from '../../api/stuff/Stuff';
+import LoadingSpinner from './LoadingSpinner';
 
 // TODO: check if this works correctly. It does show the pie chart, but it doesn't seem to be displaying the correct data
 const AnalysisPieChart = () => {
@@ -17,8 +18,7 @@ const AnalysisPieChart = () => {
     3: 'Turned into power',
   };
 
-  // access the collection of events/stuffs
-  const { stuffs } = useTracker(() => {
+  const { stuffs, ready } = useTracker(() => {
     const subscription = Meteor.subscribe(Stuffs.analysis);
     return {
       ready: subscription.ready(),
@@ -66,7 +66,7 @@ const AnalysisPieChart = () => {
 
   }, [stuffs]);
 
-  return (
+  return (ready ? (
     <div>
       {chartData && chartOptions
         ? (
@@ -77,7 +77,7 @@ const AnalysisPieChart = () => {
         )
         : <p>No events have any parts yet.</p>}
     </div>
-  );
+  ) : <LoadingSpinner />);
 };
 
 export default AnalysisPieChart;

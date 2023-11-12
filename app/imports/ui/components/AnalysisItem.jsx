@@ -4,25 +4,34 @@ import { Button, Card, Col, Collapse, Row, Table } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Subsamples } from '../../api/stuff/Subsample';
+import { Stuffs } from '../../api/stuff/Stuff';
+import LoadingSpinner from './LoadingSpinner';
 
 const AnalysisItems = ({ stuff, samples }) => {
   const [open, setOpen] = useState(false);
   const [showSubsamples, setShowSubsamples] = useState({});
 
-  const relevantSamples = samples.filter(sample => stuff.sampleIds.includes(sample._id));
+  let relevantSamples;
 
-  const { subsamples } = useTracker(() => {
+  const { ready, subsamples } = useTracker(() => {
+    const subscriptionEvent = Meteor.subscribe(Stuffs.stored);
     const subsamplesSubscription = Meteor.subscribe(Subsamples.analysis);
 
-    const rdy = subsamplesSubscription.ready();
+    const rdy = subscriptionEvent.ready() && subsamplesSubscription.ready();
 
+    const analysisItemsEvent = Stuffs.collection.find().fetch();
     const analysisItemsSubsamples = Subsamples.collection.find().fetch();
 
     return {
+      stuffs: analysisItemsEvent,
       subsamples: analysisItemsSubsamples,
       ready: rdy,
     };
   }, []);
+
+  if (stuff && stuff.sampleIds) {
+    relevantSamples = samples.filter(sample => stuff.sampleIds.includes(sample._id));
+  }
 
   const protocolNames = {
     1: 'Measure and Dispose',
@@ -42,7 +51,7 @@ const AnalysisItems = ({ stuff, samples }) => {
   };
 
   const sampleCount = stuff && stuff.sampleIds ? stuff.sampleIds.length : 'error';
-  return (
+  return (ready ? (
     <Card className="mb-3">
       <Card.Body>
         <Card.Title>{stuff.name}</Card.Title>
@@ -132,7 +141,7 @@ const AnalysisItems = ({ stuff, samples }) => {
         </Collapse>
       </Card.Body>
     </Card>
-  );
+  ) : <LoadingSpinner />);
 };
 
 AnalysisItems.propTypes = {
