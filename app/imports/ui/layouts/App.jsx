@@ -25,8 +25,8 @@ import ListClaimed from '../pages/ListClaimed';
 import ListStored from '../pages/ListStored';
 import ListDisposed from '../pages/ListDisposed';
 import ListAnalyze from '../pages/ListAnalyze';
+import Details from '../pages/Details';
 import ReportDebris from '../pages/ReportDebris';
-import Detail from '../pages/Detail';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -53,19 +53,13 @@ const App = () => {
           <Route path="/reported" element={<ProtectedRoute><ListReported /></ProtectedRoute>} />
           <Route path="/claimed" element={<ProtectedRoute><ListClaimed /></ProtectedRoute>} />
           <Route path="/stored" element={<ProtectedRoute><ListStored /></ProtectedRoute>} />
-          <Route path="/distributed" element={<ProtectedRoute><ListDisposed /></ProtectedRoute>} />
+          <Route path="/disposed" element={<ProtectedRoute><ListDisposed /></ProtectedRoute>} />
           <Route path="/analysis" element={<AdminProtectedRoute ready={ready}><ListAnalyze /></AdminProtectedRoute>} />
           {/*<Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />*/}
           <Route path="/report" element={<ProtectedRoute><ReportDebris /></ProtectedRoute>} />
-<<<<<<< HEAD
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
-          <Route path="/detail/:_id" element={<ProtectedRoute><Detail /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
-=======
           {/*<Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />*/}
           <Route path="/details/:_id" element={<ProtectedRoute><Details /></ProtectedRoute>} />
           {/*<Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />*/}
->>>>>>> sam
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

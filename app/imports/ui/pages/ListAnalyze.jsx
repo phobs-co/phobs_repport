@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Table, Button, Card, Collapse } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { Debris } from '../../api/debris/Debris';
 import LoadingSpinner from '../components/LoadingSpinner';
-<<<<<<< HEAD
-import { Samples } from '../../api/stuff/Sample';
-import AnalysisPieChart from '../components/AnalysisPieChart';
-import AnalysisItems from '../components/AnalysisItem';
-=======
 import { Samples } from '../../api/debris/Sample';
 import { Subsamples } from '../../api/debris/Subsample';
 
@@ -84,67 +80,67 @@ const AnalysisItems = ({ debris, samples }) => {
             <Table>
               {/* Table code for samples comes here */}
               <thead>
-                <tr>
-                  <th>Sample ID</th>
-                  <th>Name</th>
-                  <th>_id</th>
-                </tr>
+              <tr>
+                <th>Sample ID</th>
+                <th>Name</th>
+                <th>_id</th>
+              </tr>
               </thead>
               <tbody>
-                {relevantSamples.map((sample) => {
-                  const { sample_id: sampleId, name: sampleName, _id: sample_Id, subsampleIds = [] } = sample;
-                  const isOpen = showSubsamples[sampleId] || false;
+              {relevantSamples.map((sample) => {
+                const { sample_id: sampleId, name: sampleName, _id: sample_Id, subsampleIds = [] } = sample;
+                const isOpen = showSubsamples[sampleId] || false;
 
-                  const relevantSubsamples = subsamples.filter(subsample => subsampleIds.includes(subsample._id));
+                const relevantSubsamples = subsamples.filter(subsample => subsampleIds.includes(subsample._id));
 
-                  return (
-                    <React.Fragment key={sampleId}>
-                      <tr>
-                        <td>{sampleId}</td>
-                        <td>{sampleName}</td>
-                        <td>{sample_Id}</td>
-                        <td>
-                          <Button
-                            onClick={() => toggleSubsamples(sampleId)}
-                            aria-controls={`subsample-collapse-${sampleId}`}
-                            aria-expanded={isOpen}
-                          >
-                            {isOpen ? 'Hide Subsamples' : `Show Subsamples (${subsamples.length})`}
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan="4">
-                          <Collapse in={isOpen}>
-                            <div id={`subsample-collapse-${sampleId}`}>
-                              <Table>
-                                <thead>
-                                  <tr>
-                                    <th>Subsample ID</th>
-                                    <th>_id</th>
+                return (
+                  <React.Fragment key={sampleId}>
+                    <tr>
+                      <td>{sampleId}</td>
+                      <td>{sampleName}</td>
+                      <td>{sample_Id}</td>
+                      <td>
+                        <Button
+                          onClick={() => toggleSubsamples(sampleId)}
+                          aria-controls={`subsample-collapse-${sampleId}`}
+                          aria-expanded={isOpen}
+                        >
+                          {isOpen ? 'Hide Subsamples' : `Show Subsamples (${subsamples.length})`}
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="4">
+                        <Collapse in={isOpen}>
+                          <div id={`subsample-collapse-${sampleId}`}>
+                            <Table>
+                              <thead>
+                              <tr>
+                                <th>Subsample ID</th>
+                                <th>_id</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              {relevantSubsamples.map((subsample) => {
+                                const { subample_id: subsampleId, name: subsampleName, _id: subsample_Id = [] } = subsample;
+                                return (
+                                  <tr key={subsample_Id}>
+                                    <td>{subsampleId}</td>
+                                    <td>{subsampleName}</td>
+                                    <td>{subsample_Id}</td>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                  {relevantSubsamples.map((subsample) => {
-                                    const { subample_id: subsampleId, name: subsampleName, _id: subsample_Id = [] } = subsample;
-                                    return (
-                                      <tr key={subsample_Id}>
-                                        <td>{subsampleId}</td>
-                                        <td>{subsampleName}</td>
-                                        <td>{subsample_Id}</td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </Table>
+                                );
+                              })}
+                              </tbody>
+                            </Table>
 
-                            </div>
-                          </Collapse>
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
+                          </div>
+                        </Collapse>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })}
               </tbody>
             </Table>
           </div>
@@ -153,7 +149,6 @@ const AnalysisItems = ({ debris, samples }) => {
     </Card>
   );
 };
->>>>>>> sam
 
 const ListAnalysis = () => {
   const { _id } = useParams();
@@ -189,11 +184,6 @@ const ListAnalysis = () => {
             {debris.map((debris) => <AnalysisItems key={debris._id} debris={debris} samples={samples} />)}
 
           </Container>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md={9}>
-          <AnalysisPieChart />
         </Col>
       </Row>
     </Container>

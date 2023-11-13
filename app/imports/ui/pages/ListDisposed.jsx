@@ -1,12 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Col, Container, Row, Table } from 'react-bootstrap';
+import { Col, Container, Row, Table, Button } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
-<<<<<<< HEAD
-import { Stuffs } from '../../api/stuff/Stuff';
-import LoadingSpinner from '../components/LoadingSpinner';
-import DisposedItem from '../components/DisposedItem';
-=======
 import { useNavigate } from 'react-router-dom';
 import { Debris } from '../../api/debris/Debris';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -27,7 +22,6 @@ const DisposedItems = ({ debris }) => {
     </tr>
   );
 };
->>>>>>> sam
 
 const ListDisposed = () => {
   const { ready, debris } = useTracker(() => {
@@ -45,23 +39,19 @@ const ListDisposed = () => {
       <Row className="justify-content-center">
         <Col md={7}>
           <Col className="text-center">
-            <h2>DFG Events that have been Distributed</h2>
-            <p>This debris has been recycled, reused, etc. Samples may have been collected and these can still be viewed anytime.</p>
+            <h2>DFG Events that have been Disposed</h2>
+            <p>This debris has been recycled, burned, or thrown into a landfill 🚯</p>
           </Col>
           <Table striped bordered hover>
             <thead>
-              <tr>
-                <th>Result</th>
-                <th>Type</th>
-                <th>Details</th>
-              </tr>
+            <tr>
+              <th>Result</th>
+              <th>Type</th>
+              <th>Details</th>
+            </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
-              {stuffs.map((stuff) => <DisposedItem key={stuff._id} stuff={stuff} />)}
-=======
-              {debris.map((debris) => <DisposedItems key={debris._id} debris={debris} />)}
->>>>>>> sam
+            {debris.map((debris) => <DisposedItems key={debris._id} debris={debris} />)}
             </tbody>
           </Table>
         </Col>

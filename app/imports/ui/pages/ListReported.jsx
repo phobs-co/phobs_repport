@@ -1,19 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
-<<<<<<< HEAD
-import { Col, Container, Row, Table } from 'react-bootstrap';
-import { Stuffs } from '../../api/stuff/Stuff';
-=======
 import { Col, Container, Row, Table, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Debris } from '../../api/debris/Debris';
->>>>>>> sam
 import LoadingSpinner from '../components/LoadingSpinner';
-import ReportedItem from '../components/ReportItem';
 
-<<<<<<< HEAD
-=======
 const ReportedItems = ({ debris }) => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -69,7 +61,6 @@ const ReportedItems = ({ debris }) => {
   );
 };
 /* Renders a table containing all of the debris documents. Use <ReportedItems> to render each row. */
->>>>>>> sam
 const ListReported = () => {
   const { ready, debris } = useTracker(() => {
     const subscription = Meteor.subscribe(Debris.unclaimed);
@@ -92,22 +83,21 @@ const ListReported = () => {
           </Col>
           <Table striped bordered hover>
             <thead>
-              <tr>
-                <th>Island</th>
-                <th>City</th>
-                <th>Type</th>
-                <th>Located</th>
-                <th>Describe</th>
-                <th>Details</th>
-                <th>Claim</th>
-              </tr>
+            <tr>
+              <th>Island</th>
+              <th>City</th>
+              <th>Type</th>
+              <th>Type: Other</th>
+              <th>Located</th>
+              <th>Located: Other</th>
+              <th>Describe</th>
+              <th>Describe: Other</th>
+              <th>Details</th>
+              <th>Claim</th>
+            </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
-              {stuffs.map((stuff) => <ReportedItem key={stuff._id} stuff={stuff} />)}
-=======
-              {debris.map((debris) => <ReportedItems key={debris._id} debris={debris} />)}
->>>>>>> sam
+            {debris.map((debris) => <ReportedItems key={debris._id} debris={debris} />)}
             </tbody>
           </Table>
         </Col>

@@ -1,18 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Col, Container, Row, Table } from 'react-bootstrap';
+import { Col, Container, Row, Table, Button, Modal } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
-<<<<<<< HEAD
-import { Stuffs } from '../../api/stuff/Stuff';
-=======
 import { useNavigate } from 'react-router-dom';
 import { Debris } from '../../api/debris/Debris';
->>>>>>> sam
 import LoadingSpinner from '../components/LoadingSpinner';
-import ClaimedItems from '../components/ClaimedItem';
 
-<<<<<<< HEAD
-=======
 const ClaimedItems = ({ debris }) => {
   const navigate = useNavigate();
   const [showRelease, setShowRelease] = useState(false);
@@ -96,7 +89,6 @@ const ClaimedItems = ({ debris }) => {
 };
 
 /* Renders a table containing all of the debris documents. Use <ClaimedItems> to render each row. */
->>>>>>> sam
 const ListClaimed = () => {
   const { ready, debris } = useTracker(() => {
     const subscription = Meteor.subscribe(debris.claimed);
@@ -118,19 +110,18 @@ const ListClaimed = () => {
           </Col>
           <Table striped bordered hover>
             <thead>
-              <tr>
-                <th>Island</th>
-                <th>City</th>
-                <th>Type</th>
-                <th>Located</th>
-                <th>Description</th>
-                <th>Details</th>
-                <th>Remove</th>
-                <th>Store</th>
-              </tr>
+            <tr>
+              <th>Island</th>
+              <th>City</th>
+              <th>Type</th>
+              <th>Located</th>
+              <th>Details</th>
+              <th>Release</th>
+              <th>Store</th>
+            </tr>
             </thead>
             <tbody>
-              {debris.map((debris) => <ClaimedItems key={debris._id} debris={debris} />)}
+            {debris.map((debris) => <ClaimedItems key={debris._id} debris={debris} />)}
             </tbody>
           </Table>
         </Col>

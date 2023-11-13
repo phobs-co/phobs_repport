@@ -1,12 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Col, Container, Row, Table } from 'react-bootstrap';
+import { Col, Container, Row, Table, Button, Modal, Form } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
-<<<<<<< HEAD
-import { Stuffs } from '../../api/stuff/Stuff';
-import LoadingSpinner from '../components/LoadingSpinner';
-import StoredItem from '../components/StoredItem';
-=======
 import { useNavigate } from 'react-router-dom';
 import { Debris } from '../../api/debris/Debris';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -145,7 +140,6 @@ const StoredItems = ({ debris }) => {
     </>
   );
 };
->>>>>>> sam
 
 const ListStored = () => {
   const { ready, debris } = useTracker(() => {
@@ -169,21 +163,17 @@ const ListStored = () => {
           </Col>
           <Table striped bordered hover>
             <thead>
-              <tr>
-                <th>Facility</th>
-                <th>Type</th>
-                <th>Details</th>
-                <th>Transfer</th>
-                <th>Sample</th>
-                <th>Distributed</th>
-              </tr>
+            <tr>
+              <th>Facility</th>
+              <th>Type</th>
+              <th>Details</th>
+              <th>Transfer</th>
+              <th>Sample</th>
+              <th>Disposed</th>
+            </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
-              {stuffs.map((stuff) => <StoredItem key={stuff._id} stuff={stuff} />)}
-=======
-              {debris.map((debris) => <StoredItems key={debris._id} debris={debris} />)}
->>>>>>> sam
+            {debris.map((debris) => <StoredItems key={debris._id} debris={debris} />)}
             </tbody>
           </Table>
         </Col>

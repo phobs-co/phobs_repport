@@ -22,30 +22,15 @@ if (Debris.collection.find().count() === 0) {
 }
 
 Meteor.methods({
-<<<<<<< HEAD
-  'stuffs.claim'(itemId, newOwner) {
-    check(itemId, String);
-    check(newOwner, String);
-    // TODO: Add validation and permission checks (they might be allowed to move it)
-    Stuffs.collection.update(itemId, { $set: { status: 'claimed' } });
-    Stuffs.collection.update(itemId, { $set: { owner: newOwner } });
-    Stuffs.collection.update(itemId, { $set: { claimedAt: Date.now() } });
-=======
   'Debris.claim'(itemId, newOwner) {
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Debris.collection.update(itemId, { $set: { status: 'claimed' } });
     Debris.collection.update(itemId, { $set: { owner: newOwner } });
->>>>>>> sam
   },
 });
 
 Meteor.methods({
-<<<<<<< HEAD
-  'stuffs.release'(itemId) {
-    check(itemId, String);
-=======
   'Debris.release'(itemId) {
->>>>>>> sam
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Debris.collection.update(itemId, { $set: { status: 'unclaimed' } });
     // currently does not change owner back
@@ -53,12 +38,7 @@ Meteor.methods({
 });
 
 Meteor.methods({
-<<<<<<< HEAD
-  'stuffs.store'(itemId) {
-    check(itemId, String);
-=======
   'Debris.store'(itemId) {
->>>>>>> sam
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Debris.collection.update(itemId, { $set: { status: 'stored' } });
   },
@@ -66,31 +46,16 @@ Meteor.methods({
 
 // newOwner could be provided through a selection menu
 Meteor.methods({
-<<<<<<< HEAD
-  'stuffs.transfer'(itemId, newOwner) {
-    check(itemId, String);
-    check(newOwner, String);
-=======
   'Debris.transfer'(itemId, newOwner) {
->>>>>>> sam
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Debris.collection.update(itemId, { $set: { owner: newOwner } });
   },
 });
 
 Meteor.methods({
-<<<<<<< HEAD
-  'stuffs.dispose'(itemId, selectedDistribution) {
-    check(itemId, String);
-    check(selectedDistribution, Number);
-    // TODO: Add validation and permission checks (they might be allowed to move it)
-    Stuffs.collection.update(itemId, { $set: { status: 'disposed' } });
-    Stuffs.collection.update(itemId, { $set: { distribution: selectedDistribution } });
-=======
   'Debris.dispose'(itemId) {
     // TODO: Add validation and permission checks (they might be allowed to move it)
     Debris.collection.update(itemId, { $set: { status: 'disposed' } });
->>>>>>> sam
   },
 });
 
