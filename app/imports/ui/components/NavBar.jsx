@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
@@ -7,10 +7,26 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { BoxArrowRight, PersonFill, PersonPlusFill, ChatQuote } from 'react-bootstrap-icons';
 
 const NavBar = () => {
-  // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { currentUser } = useTracker(() => ({
+  const [isGuest, setIsGuest] = useState(false);
+
+  const { currentUser, organization } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
+    organization: Meteor.user() ? Meteor.user().organization : null,
   }), []);
+
+  const handleGuestLogin = () => {
+    Meteor.loginWithPassword('guest', 'changeme', (error) => {
+      if (error) {
+        console.error('Guest login error:', error);
+      } else {
+        setIsGuest(true);
+      }
+    });
+  };
+
+  const handleGuestLogout = () => {
+    setIsGuest(false);
+  };
 
   return (
     <Navbar bg="dark" expand="lg">
@@ -21,12 +37,20 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto justify-content-start">
-            {currentUser ? ([
+            {isGuest || currentUser ? ([
               <Nav.Link id="add-stuff-nav" as={NavLink} to="/add" key="add">Add Stuff</Nav.Link>,
-              <Nav.Link id="list-stuff-nav" as={NavLink} to="/list" key="list">List Stuff</Nav.Link>,
+              <Nav.Link id="add-stuff-nav" as={NavLink} to="/report" key="report">Report Debris</Nav.Link>,
+              <Nav.Link id="list-stuff-nav" as={NavLink} to="/list" key="list">Everything</Nav.Link>,
+              <Nav.Link id="list-stuff-nav" as={NavLink} to="/reported" key="reported">Reported</Nav.Link>,
+              <Nav.Link id="list-stuff-nav" as={NavLink} to="/claimed" key="claimed">Claimed</Nav.Link>,
+              <Nav.Link id="list-stuff-nav" as={NavLink} to="/stored" key="stored">Stored</Nav.Link>,
+              <Nav.Link id="list-stuff-nav" as={NavLink} to="/distributed" key="disposed">Distributed</Nav.Link>,
             ]) : ''}
             {Roles.userIsInRole(Meteor.userId(), 'admin') ? (
-              <Nav.Link id="list-stuff-admin-nav" as={NavLink} to="/admin" key="admin">Admin</Nav.Link>
+              <>
+                <Nav.Link id="list-stuff-admin-nav" as={NavLink} to="/analysis" key="analysis">Analysis</Nav.Link>
+                <Nav.Link id="list-stuff-admin-nav" as={NavLink} to="/admin" key="admin">Admin</Nav.Link>
+              </>
             ) : ''}
           </Nav>
           <Nav className="justify-content-end">
@@ -34,22 +58,34 @@ const NavBar = () => {
               <NavDropdown id="login-dropdown" title="Login">
                 <NavDropdown.Item id="login-dropdown-sign-in" as={NavLink} to="/signin">
                   <PersonFill />
-                  Sign
-                  in
+                  Sign in
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-sign-up" as={NavLink} to="/signup">
                   <PersonPlusFill />
-                  Sign
-                  up
+                  Sign up
                 </NavDropdown.Item>
+                <NavDropdown.Item id="login-dropdown-guest" as={NavLink} to="/#" onClick={handleGuestLogin}>
+                  <PersonFill />
+                  Guest
+                </NavDropdown.Item>
+                {currentUser ? (
+                  <NavDropdown.Item id="send-invite-nav" as={NavLink} to="/invite" key="invite">Send Invite</NavDropdown.Item>
+                ) : null}
               </NavDropdown>
             ) : (
               <NavDropdown id="navbar-current-user" title={currentUser}>
-                <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout">
+                {currentUser ? (
+                  <NavDropdown.Item id="send-invite-nav" as={NavLink} to="/invite" key="invite">Send Invite</NavDropdown.Item>
+                ) : null}
+                <NavDropdown.Item id="navbar-edit-profile" as={NavLink} to="/editprofile">
+                  <PersonPlusFill />
+                  Edit
+                  Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item id="navbar-sign-out" as={NavLink} to="/signout" onClick={handleGuestLogout}>
                   <BoxArrowRight />
                   {' '}
-                  Sign
-                  out
+                  Sign out
                 </NavDropdown.Item>
               </NavDropdown>
             )}

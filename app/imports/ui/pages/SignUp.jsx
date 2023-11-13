@@ -61,6 +61,9 @@ const SignUp = ({ location }) => {
             {' '}
             <Link to="/signin">here</Link>
           </Alert>
+          <Alert variant="">
+            <Link to="/OrgSignUp">Sign up your organization</Link>
+          </Alert>
           {error === '' ? (
             ''
           ) : (
