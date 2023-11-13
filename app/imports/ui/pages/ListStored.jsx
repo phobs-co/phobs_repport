@@ -3,11 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { Col, Container, Row, Table, Button, Modal, Form } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { useNavigate } from 'react-router-dom';
-import { Stuffs } from '../../api/stuff/Stuff';
+import { Debris } from '../../api/debris/Debris';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Samples } from '../../api/stuff/Sample';
+import { Samples } from '../../api/debris/Sample';
 
-const StoredItems = ({ stuff }) => {
+const StoredItems = ({ debris }) => {
   const navigate = useNavigate();
   const [showDispose, setShowDispose] = useState(false);
   const [showNewSample, setShowNewSample] = useState(false);
@@ -15,18 +15,18 @@ const StoredItems = ({ stuff }) => {
 
   // Action for "Details" button
   const handleDetailsClick = () => {
-    navigate(`/details/${stuff._id}`);
+    navigate(`/details/${debris._id}`);
   };
 
   // Action for "Transfer" button
   const handleTransferClick = () => {
-    navigate(`/transfer/${stuff._id}`);
+    navigate(`/transfer/${debris._id}`);
   };
 
   // Actions for "Sample" button
 
   const handleExistingSampleClick = () => {
-    navigate(`/analysis#${stuff.event_id}`);
+    navigate(`/analysis#${debris.event_id}`);
   };
 
   // if none exists: ask what sample protocol they are using 1-6 via dropdown
@@ -38,15 +38,15 @@ const StoredItems = ({ stuff }) => {
     console.log(selectedProtocol);
     const newSampleId = Samples.collection.insert({
       name: 'Sample Initial',
-      event_id: 'a', // stuff.eventId
+      event_id: 'a', // debris.eventId
       sample_id: '0001',
     }, (err, _id) => { // callback function to get the _id of the inserted document
       if (err) {
         console.error('Could not insert new sample:', err);
       } else {
-        Meteor.call('stuffs.linkSamplesWithEvent', stuff._id, [newSampleId], selectedProtocol, (error) => {
+        Meteor.call('debris.linkSamplesWithEvent', debris._id, [newSampleId], selectedProtocol, (error) => {
           if (error) {
-            console.log(`Creating a sample for ${stuff._id} failed${error}`);
+            console.log(`Creating a sample for ${debris._id} failed${error}`);
           } else {
             handleCloseNewSample();
           }
@@ -63,16 +63,16 @@ const StoredItems = ({ stuff }) => {
   const handleShowDispose = () => setShowDispose(true);
 
   const handleDispose = () => {
-    Meteor.call('stuffs.dispose', stuff._id, (error) => {
+    Meteor.call('debris.dispose', debris._id, (error) => {
       if (error) {
-        console.log(`Marking ${stuff._id} as disposed failed`);
+        console.log(`Marking ${debris._id} as disposed failed`);
       } else {
         handleCloseDispose();
       }
     });
   };
 
-  const eventItem = Stuffs.collection.findOne(stuff._id);
+  const eventItem = Debris.collection.findOne(debris._id);
 
   const SampleButton = (eventItem && (!eventItem.sampleIds || eventItem.sampleIds.length === 0)) ?
     <Button onClick={handleShowNewSample}>Create Sample</Button> :
@@ -81,8 +81,8 @@ const StoredItems = ({ stuff }) => {
   return (
     <>
       <tr>
-        <td>{stuff.facility}</td>
-        <td>{stuff.type}</td>
+        <td>{debris.facility}</td>
+        <td>{debris.type}</td>
         <td><Button onClick={handleDetailsClick}>Details</Button></td>
         <td><Button onClick={handleTransferClick}>Transfer</Button></td>
         <td>{SampleButton}</td>
@@ -142,13 +142,13 @@ const StoredItems = ({ stuff }) => {
 };
 
 const ListStored = () => {
-  const { ready, stuffs } = useTracker(() => {
-    const subscription = Meteor.subscribe(Stuffs.stored);
+  const { ready, debris } = useTracker(() => {
+    const subscription = Meteor.subscribe(Debris.stored);
     const rdy = subscription.ready();
-    const storedItems = Stuffs.collection.find().fetch();
+    const storedItems = Debris.collection.find().fetch();
 
     return {
-      stuffs: storedItems,
+      debris: storedItems,
       ready: rdy,
     };
   }, []);
@@ -173,7 +173,7 @@ const ListStored = () => {
               </tr>
             </thead>
             <tbody>
-              {stuffs.map((stuff) => <StoredItems key={stuff._id} stuff={stuff} />)}
+              {debris.map((debris) => <StoredItems key={debris._id} debris={debris} />)}
             </tbody>
           </Table>
         </Col>
