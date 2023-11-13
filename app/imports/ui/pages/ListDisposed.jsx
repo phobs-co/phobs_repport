@@ -2,18 +2,41 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
+<<<<<<< HEAD
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
 import DisposedItem from '../components/DisposedItem';
+=======
+import { useNavigate } from 'react-router-dom';
+import { Debris } from '../../api/debris/Debris';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+const DisposedItems = ({ debris }) => {
+  const navigate = useNavigate();
+
+  // Action for "Details" button
+  const handleDetailsClick = () => {
+    navigate(`/details/${debris._id}`);
+  };
+
+  return (
+    <tr>
+      <td>{debris.result}</td>
+      <td>{debris.type}</td>
+      <td><Button onClick={handleDetailsClick}>Details</Button></td>
+    </tr>
+  );
+};
+>>>>>>> sam
 
 const ListDisposed = () => {
-  const { ready, stuffs } = useTracker(() => {
-    const subscription = Meteor.subscribe(Stuffs.disposed);
+  const { ready, debris } = useTracker(() => {
+    const subscription = Meteor.subscribe(Debris.disposed);
     const rdy = subscription.ready();
-    const disposedItems = Stuffs.collection.find().fetch();
+    const disposedItems = Debris.collection.find().fetch();
 
     return {
-      stuffs: disposedItems,
+      debris: disposedItems,
       ready: rdy,
     };
   }, []);
@@ -34,7 +57,11 @@ const ListDisposed = () => {
               </tr>
             </thead>
             <tbody>
+<<<<<<< HEAD
               {stuffs.map((stuff) => <DisposedItem key={stuff._id} stuff={stuff} />)}
+=======
+              {debris.map((debris) => <DisposedItems key={debris._id} debris={debris} />)}
+>>>>>>> sam
             </tbody>
           </Table>
         </Col>
