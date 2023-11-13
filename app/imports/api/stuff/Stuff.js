@@ -37,16 +37,17 @@ class StuffsCollection {
       located: {
         type: String,
         allowedValues: ['At sea, BEYOND three miles from ' +
-        'nearest land', 'At sea, WITHIN three miles of nearest land', 'In the shore break', 'On the beach BELOW the high wash of the waves', 'On the beach ABOVE the high wash of the waves', 'None of the above, a description follows bellow'],
+        'nearest land', 'At sea, WITHIN three miles of nearest land', 'In the shore break', 'On the beach BELOW the high wash of the waves', 'On the beach ABOVE the high wash of the waves', 'Other'],
         defaultValue: 'At sea, BEYOND three miles from nearest land',
       },
       describe: {
         type: String,
-        allowedValues: ['caught on the reef or is partially buried in sand',
-          'loose in the shore break or on the shoreline and ' +
-          'could go back out to sea', 'trapped in a tide ' +
-          'pool and cannot escape', 'loose on the shore ' +
-          'but caught in the vegetation line', 'tied to a fixed object so it cannot be swept away', 'pushed inland above the high wash of the waves so it cannot be swept away', 'Other - please explain how urgent recovery/removal is'],
+        allowedValues: ['caught on the reef or is ' +
+        'partially buried in sand', 'loose in the shore ' +
+        'break or on the shoreline and could go ' +
+        'back out to sea', 'trapped in a tide pool and ' +
+        'cannot escape', 'loose on the shore but caught in ' +
+        'the vegetation line', 'tied to a fixed object so it cannot be swept away', 'pushed inland above the high wash of the waves so it cannot be swept away', 'Other'],
         defaultValue: 'caught on the reef or is partially buried in sand',
       },
       island: {
@@ -100,7 +101,35 @@ class StuffsCollection {
         optional: true,
         min: 0,
       },
-
+      parts: {
+        type: Array,
+        optional: true,
+      },
+      'parts.$': Object,
+      'parts.$.name': {
+        type: String,
+        optional: true,
+      },
+      'parts.$.distribution': {
+        type: Number,
+        optional: true,
+      },
+      'parts.$.weight': {
+        type: Number,
+        optional: true,
+      },
+      customTypeDescription: {
+        type: String,
+        optional: true,
+      },
+      customLocatedDescription: {
+        type: String,
+        optional: true,
+      },
+      customDescriptionDescription: {
+        type: String,
+        optional: true,
+      },
     });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.
     this.collection.attachSchema(this.schema);

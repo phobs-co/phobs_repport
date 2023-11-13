@@ -1,36 +1,10 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Col, Container, Row, Table, Button } from 'react-bootstrap';
+import { Col, Container, Row, Table } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
-import { useNavigate } from 'react-router-dom';
-import { PencilSquare } from 'react-bootstrap-icons';
 import { Stuffs } from '../../api/stuff/Stuff';
 import LoadingSpinner from '../components/LoadingSpinner';
-
-const DisposedItems = ({ stuff }) => {
-  const navigate = useNavigate();
-
-  // Action for "Details" button
-  const handleDetailsClick = () => {
-    navigate(`/detail/${stuff._id}`);
-  };
-
-  const distributionTypes = {
-    0: 'Not reported',
-    1: 'Recycled',
-    2: 'Reused',
-    3: 'Turned into power',
-  };
-  const distributionType = distributionTypes[stuff.distribution];
-
-  return (
-    <tr>
-      <td>{distributionType}</td>
-      <td>{stuff.type}</td>
-      <td><Button variant="secondary" onClick={handleDetailsClick}><PencilSquare /></Button></td>
-    </tr>
-  );
-};
+import DisposedItem from '../components/DisposedItem';
 
 const ListDisposed = () => {
   const { ready, stuffs } = useTracker(() => {
@@ -60,7 +34,7 @@ const ListDisposed = () => {
               </tr>
             </thead>
             <tbody>
-              {stuffs.map((stuff) => <DisposedItems key={stuff._id} stuff={stuff} />)}
+              {stuffs.map((stuff) => <DisposedItem key={stuff._id} stuff={stuff} />)}
             </tbody>
           </Table>
         </Col>
